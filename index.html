@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D&D 3.5e Character Sheet</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>D&D 3.5e Character Sheet</h1>
+        <p id="character-summary">Unnamed Character • Unassigned Class</p>
+      </div>
+      <div class="toolbar">
+        <button type="button" id="toggle-theme">Dark Mode</button>
+        <button type="button" id="new-sheet">New Sheet</button>
+        <button type="button" id="save-sheet">Save</button>
+        <button type="button" id="load-sheet">Load</button>
+        <button type="button" id="export-sheet">Export JSON</button>
+          <label class="file-button">
+            Import JSON
+            <input type="file" id="import-sheet" accept="application/json" />
+          </label>
+      </div>
+    </header>
+
+    <main class="sheet">
+      <nav class="tabbar" aria-label="Character sheet sections">
+        <button type="button" class="tab is-active" data-tab="overview">Overview</button>
+        <button type="button" class="tab" data-tab="combat">Combat</button>
+        <button type="button" class="tab" data-tab="skills">Skills</button>
+        <button type="button" class="tab" data-tab="inventory">Inventory</button>
+        <button type="button" class="tab" data-tab="spells">Spells</button>
+      </nav>
+
+      <section class="tab-panel is-active" data-tab-panel="overview">
+        <section class="panel identity-panel">
+          <h2>Identity</h2>
+          <div class="grid cols-4">
+            <label>Character Name<input data-field="characterName" /></label>
+            <label>Player<input data-field="player" /></label>
+            <label>Class and Level<input data-field="classLevel" /></label>
+            <label>Race<input data-field="race" /></label>
+            <label>Alignment<input data-field="alignment" /></label>
+            <label>Deity<input data-field="deity" /></label>
+            <label>Size
+              <select data-field="size">
+                <option value="F">F</option>
+                <option value="D">D</option>
+                <option value="T">T</option>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="H">H</option>
+                <option value="G">G</option>
+                <option value="C">C</option>
+              </select>
+            </label>
+            <label>Age<input data-field="age" type="number" /></label>
+            <label>Gender<input data-field="gender" /></label>
+            <label>Height<input data-field="height" /></label>
+            <label>Weight<input data-field="weight" /></label>
+            <label>Eyes<input data-field="eyes" /></label>
+            <label>Hair<input data-field="hair" /></label>
+            <label>Skin<input data-field="skin" /></label>
+            <label>Campaign<input data-field="campaign" /></label>
+            <label>Experience Points<input data-field="experiencePoints" type="number" /></label>
+          </div>
+        </section>
+
+        <section class="panel core-panel">
+          <div class="subpanel">
+            <div class="section-heading">
+              <h2>Abilities</h2>
+              <button type="button" id="toggle-temp-stats">Use Temp Stats</button>
+            </div>
+            <div id="abilities" class="abilities-grid"></div>
+          </div>
+
+          <div class="subpanel">
+            <h2>Saves</h2>
+            <div id="saves" class="save-grid"></div>
+          </div>
+
+          <div class="subpanel">
+            <div class="section-heading">
+              <h2>Feats and Features</h2>
+              <div class="section-actions">
+                <button type="button" id="toggle-feat-edit">Edit</button>
+                <button type="button" id="add-feat-item">Add Feat</button>
+              </div>
+            </div>
+            <div class="feat-list" id="feat-list">
+            <div class="feat-header feat-row">
+              <span>Feat</span>
+              <span></span>
+            </div>
+            <div id="feat-items" class="stack tight"></div>
+            </div>
+            <label>Special Abilities<textarea data-field="specialAbilities" rows="8"></textarea></label>
+            <label>Languages<textarea data-field="languages" rows="6"></textarea></label>
+          </div>
+        </section>
+      </section>
+
+      <section class="tab-panel" data-tab-panel="combat">
+        <section class="panel">
+          <div class="combat-summary-grid">
+            <label>STR Mod<input data-field="combatStrMod" readonly /></label>
+            <label>DEX Mod<input data-field="combatDexMod" readonly /></label>
+            <label>CON Mod<input data-field="combatConMod" readonly /></label>
+            <label>INT Mod<input data-field="combatIntMod" readonly /></label>
+            <label>WIS Mod<input data-field="combatWisMod" readonly /></label>
+            <label>CHA Mod<input data-field="combatChaMod" readonly /></label>
+            <label>Fortitude<input data-field="combatFortitudeTotal" readonly /></label>
+            <label>Reflex<input data-field="combatReflexTotal" readonly /></label>
+            <label>Will<input data-field="combatWillTotal" readonly /></label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Combat</h2>
+          <div class="grid cols-3 compact">
+            <label>HP<input data-field="hp" type="number" /></label>
+            <label>Wounds / Current HP<input data-field="currentHp" /></label>
+            <label>Nonlethal Damage<input data-field="nonlethalDamage" type="number" /></label>
+            <label>Speed<input data-field="speed" /></label>
+            <label>Initiative Total<input data-field="initiativeTotal" type="number" readonly /></label>
+            <label>Initiative Misc<input data-field="initiativeMisc" type="number" /></label>
+            <label>Armor Class<input data-field="armorClass" type="number" /></label>
+            <label>Touch AC<input data-field="touchAc" type="number" /></label>
+            <label>Flat-Footed AC<input data-field="flatFootedAc" type="number" /></label>
+            <label>Base Attack Bonus<input data-field="baseAttackBonus" type="number" /></label>
+            <label>Grapple<input data-field="grapple" type="number" /></label>
+            <label>Spell Resistance<input data-field="spellResistance" /></label>
+            <label>Damage Reduction<input data-field="damageReduction" /></label>
+            <label>AC Notes<input data-field="acNotes" /></label>
+            <label>Conditional Modifiers<input data-field="conditionalModifiers" /></label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Attacks</h2>
+          <div id="attacks" class="stack"></div>
+        </section>
+      </section>
+
+      <section class="tab-panel" data-tab-panel="skills">
+        <section class="panel">
+          <div class="section-heading">
+            <h2>Skills</h2>
+            <div class="skills-summary">
+              <label>Total Ranks
+                <input id="total-skill-ranks" readonly />
+              </label>
+            </div>
+          </div>
+          <div class="skills-header skill-row">
+            <span>Class</span>
+            <span>Name</span>
+            <span>Ability</span>
+            <span>Total</span>
+            <span>Ranks</span>
+            <span>Misc</span>
+          </div>
+          <div id="skills" class="stack tight"></div>
+          <div class="custom-skill-list" id="custom-skill-list">
+            <div class="section-heading custom-skills-heading">
+              <div class="custom-skills-title">Custom Skills</div>
+              <div class="section-actions">
+                <button type="button" id="toggle-custom-skill-edit">Edit</button>
+                <button type="button" id="add-custom-skill-item">Add Custom Skill</button>
+              </div>
+            </div>
+            <div class="skills-header custom-skill-row">
+              <span>Class</span>
+              <span>Name</span>
+              <span>Ability</span>
+              <span>Total</span>
+              <span>Ranks</span>
+              <span>Misc</span>
+              <span></span>
+            </div>
+            <div id="custom-skills" class="stack tight"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="tab-panel" data-tab-panel="inventory">
+        <section class="panel two-column">
+          <div>
+            <div class="section-heading">
+              <h2>Gear</h2>
+              <div class="section-actions">
+                <button type="button" id="toggle-gear-edit">Edit</button>
+                <button type="button" id="add-gear-item">Add Item</button>
+              </div>
+            </div>
+            <label>Armor / Protective Item<textarea data-field="armor" rows="5"></textarea></label>
+            <label>Shield / Protective Item<textarea data-field="shield" rows="4"></textarea></label>
+            <label>Protective Items<textarea data-field="protectiveItems" rows="4"></textarea></label>
+            <div class="gear-list" id="gear-list">
+            <div class="gear-header gear-row">
+              <span>Description</span>
+              <span>Weight</span>
+              <span></span>
+            </div>
+            <div id="gear-items" class="stack tight"></div>
+            </div>
+          </div>
+          <div>
+            <h2>Money and Load</h2>
+            <div class="grid cols-2 compact">
+              <label>CP<input data-field="cp" type="number" /></label>
+              <label>SP<input data-field="sp" type="number" /></label>
+              <label>GP<input data-field="gp" type="number" /></label>
+              <label>PP<input data-field="pp" type="number" /></label>
+               <label>Light Load<input data-field="lightLoad" readonly /></label>
+               <label>Medium Load<input data-field="mediumLoad" readonly /></label>
+               <label>Heavy Load<input data-field="heavyLoad" readonly /></label>
+               <label>Lift Over Head<input data-field="liftOverHead" readonly /></label>
+               <label>Lift Off Ground<input data-field="liftOffGround" readonly /></label>
+               <label>Push or Drag<input data-field="pushOrDrag" readonly /></label>
+               <label>Coin Weight<input data-field="coinWeight" readonly /></label>
+               <label>Gear Weight<input data-field="gearWeightCarried" readonly /></label>
+               <label>Total Weight Carried<input data-field="totalWeightCarried" readonly /></label>
+                 <label>Load Status<input id="load-status" readonly /></label>
+                 <label>Armor Max Dex<input data-field="armorMaxDex" /></label>
+                 <label>Load Max Dex<input data-field="loadMaxDex" readonly /></label>
+                 <label>Load Check Penalty<input data-field="loadCheckPenalty" readonly /></label>
+                 <label>Armor Check Penalty<input data-field="armorCheckPenalty" type="number" /></label>
+                <label>Run Multiplier<input data-field="runMultiplier" readonly /></label>
+                <label>Arcane Spell Failure %<input data-field="arcaneSpellFailure" /></label>
+               <label>Spell Save DC Mod<input data-field="spellSaveDcMod" type="number" /></label>
+               <label>Domains / Specialty School<input data-field="domains" /></label>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="tab-panel" data-tab-panel="spells">
+        <section class="panel">
+          <h2>Spells</h2>
+          <div id="spells" class="stack"></div>
+        </section>
+      </section>
+    </main>
+
+    <template id="ability-template">
+      <article class="ability-card">
+        <h3 data-ability-name></h3>
+        <div class="paired-fields">
+          <label class="compact-field"><span>Score</span><input type="number" data-score /></label>
+          <label class="compact-field"><span>Modifier</span><input data-modifier readonly /></label>
+        </div>
+        <div class="paired-fields">
+          <label class="compact-field"><span>Temp Score</span><input type="number" data-temp-score /></label>
+          <label class="compact-field"><span>Temp Modifier</span><input data-temp-modifier readonly /></label>
+        </div>
+      </article>
+    </template>
+
+    <template id="save-template">
+      <article class="save-card">
+        <h3 data-save-name></h3>
+        <label class="inline-field"><span>Total</span><input type="number" data-total readonly /></label>
+        <label class="inline-field"><span>Base</span><input type="number" data-base /></label>
+        <label class="inline-field"><span>Ability Mod</span><input data-ability readonly /></label>
+        <label class="inline-field"><span>Magic</span><input type="number" data-magic /></label>
+        <label class="inline-field"><span>Misc</span><input type="number" data-misc /></label>
+        <label class="inline-field"><span>Temp</span><input type="number" data-temp /></label>
+      </article>
+    </template>
+
+    <template id="attack-template">
+      <article class="attack-card grid cols-6 compact">
+        <label>Name<input data-name /></label>
+        <label>Attack Bonus<input data-attack-bonus /></label>
+        <label>Damage<input data-damage /></label>
+        <label>Critical<input data-critical /></label>
+        <label>Range<input data-range /></label>
+        <label>Type<input data-type /></label>
+        <label class="span-6">Notes<input data-notes /></label>
+        <label class="span-6">Ammunition<input data-ammunition /></label>
+      </article>
+    </template>
+
+    <template id="skill-template">
+      <label class="skill-row">
+        <input type="checkbox" data-class-skill />
+        <input data-skill-name readonly />
+        <span data-skill-ability></span>
+        <input type="number" data-skill-total readonly />
+        <input type="number" data-skill-ranks />
+        <input type="number" data-skill-misc />
+      </label>
+    </template>
+
+    <template id="custom-skill-template">
+      <article class="custom-skill-row">
+        <input type="checkbox" data-class-skill />
+        <input data-skill-name placeholder="Custom skill name" />
+        <select data-skill-ability>
+          <option value="str">STR</option>
+          <option value="dex">DEX</option>
+          <option value="con">CON</option>
+          <option value="int">INT</option>
+          <option value="wis">WIS</option>
+          <option value="cha">CHA</option>
+        </select>
+        <input type="number" data-skill-total readonly />
+        <input type="number" data-skill-ranks />
+        <input type="number" data-skill-misc />
+        <button type="button" class="danger-button" data-remove-custom-skill>Remove</button>
+      </article>
+    </template>
+
+    <template id="spell-template">
+      <article class="spell-card">
+        <div class="spell-header grid cols-4 compact">
+          <label>Level<input data-level-label readonly /></label>
+          <label>Known<input type="number" data-known /></label>
+          <label>Per Day<input type="number" data-per-day /></label>
+          <label>Bonus<input type="number" data-bonus /></label>
+        </div>
+        <label>Spells<textarea rows="5" data-spells-list></textarea></label>
+      </article>
+    </template>
+
+    <template id="gear-template">
+      <article class="gear-row gear-card">
+        <input data-gear-description placeholder="Backpack, rope, rations..." />
+        <input type="number" step="0.1" min="0" data-gear-weight placeholder="0" />
+        <button type="button" class="danger-button" data-remove-gear>Remove</button>
+      </article>
+    </template>
+
+    <template id="feat-template">
+      <article class="feat-row feat-card">
+        <input data-feat-name placeholder="Power Attack, Combat Expertise..." />
+        <button type="button" class="danger-button" data-remove-feat>Remove</button>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
