@@ -181,6 +181,10 @@ function penaltyValue(value) {
   return amount === 0 ? 0 : -Math.abs(amount);
 }
 
+function worsePenalty(...values) {
+  return values.reduce((worst, value) => Math.min(worst, penaltyValue(value)), 0);
+}
+
 function appliesArmorCheckPenalty(skillName) {
   const normalized = String(skillName || "").replace(/\s+\d+$/, "").trim().toLowerCase();
   return ARMOR_CHECK_PENALTY_SKILLS.has(normalized);
@@ -308,7 +312,7 @@ function updateDerivedFields() {
   const runMultiplierInput = document.querySelector('[data-field="runMultiplier"]');
   if (runMultiplierInput) runMultiplierInput.value = state.runMultiplier;
 
-  const skillCheckPenalty = penaltyValue(state.armorCheckPenalty) + penaltyValue(state.loadCheckPenalty);
+  const skillCheckPenalty = worsePenalty(state.armorCheckPenalty, state.loadCheckPenalty);
 
   state.skills.forEach((skill, index) => {
     const row = document.querySelector(`[data-skill-block="${index}"]`);
